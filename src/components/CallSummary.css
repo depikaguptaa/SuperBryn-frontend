@@ -1,0 +1,234 @@
+.call-summary-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.call-summary-modal {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(102, 126, 234, 0.2);
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.summary-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.summary-icon {
+    font-size: 2rem;
+}
+
+.summary-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.summary-content {
+    padding: 1.5rem 2rem;
+}
+
+.summary-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.summary-section {
+    margin-bottom: 1.5rem;
+}
+
+.summary-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.action-group {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.action-group h4 {
+    font-size: 0.95rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.action-group.success h4 {
+    color: #68d391;
+}
+
+.action-group.warning h4 {
+    color: #f6ad55;
+}
+
+.action-group.info h4 {
+    color: #63b3ed;
+}
+
+.action-group ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.action-group li {
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.action-group li strong {
+    color: var(--text-primary);
+}
+
+.description {
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.no-actions {
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* Cost breakdown */
+.cost-section {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+.cost-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.cost-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.9rem;
+}
+
+.cost-row.total {
+    border-bottom: none;
+    border-top: 2px solid rgba(102, 126, 234, 0.3);
+    margin-top: 0.5rem;
+    padding-top: 0.75rem;
+    font-weight: 600;
+}
+
+.cost-service {
+    color: var(--text-primary);
+}
+
+.cost-usage {
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.cost-amount {
+    color: #68d391;
+    text-align: right;
+    font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.cost-row.total .cost-amount {
+    color: #a5b4fc;
+}
+
+.cost-note {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* Footer */
+.summary-footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: center;
+}
+
+.close-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 0.875rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.close-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* Scrollbar */
+.call-summary-modal::-webkit-scrollbar {
+    width: 6px;
+}
+
+.call-summary-modal::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.call-summary-modal::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
