@@ -1,14 +1,15 @@
 # Voice Agent Frontend
 
-Modern React web app for AI Voice Agent with real-time avatar and appointment booking.
+Modern React web app for AI Voice Agent with real-time Beyond Presence avatar and appointment booking.
 
 ## Features
 
 - 🎙️ Real-time voice conversation with AI
-- 👤 Animated avatar (with Beyond Presence integration)
+- 👤 Beyond Presence realistic avatar (with animated fallback)
 - 🔧 Live tool call visualization
-- 📋 Call summary with cost breakdown
-- 🌙 Premium dark mode UI
+- 📋 Call summary with conversation details
+- 🌙 Premium dark mode UI with glassmorphism
+- ✅ Connection state tracking with End Call button
 
 ## Setup
 
@@ -31,11 +32,6 @@ Set your token server URL:
 VITE_TOKEN_SERVER_URL=http://localhost:8080
 ```
 
-Optional: Add Beyond Presence API key for realistic avatar:
-```
-VITE_BEYOND_PRESENCE_API_KEY=your_key
-```
-
 ### 3. Start Development Server
 
 ```bash
@@ -54,10 +50,10 @@ npm run build
 
 ```
 src/
-├── App.jsx              # Main app with LiveKit integration
-├── App.css              # Main styles
+├── App.jsx              # Main app with LiveKit + Beyond Presence
+├── App.css              # Main styles with glassmorphism
 ├── components/
-│   ├── Avatar.jsx       # Avatar with Beyond Presence fallback
+│   ├── Avatar.jsx       # Animated fallback avatar
 │   ├── Avatar.css
 │   ├── ToolCallDisplay.jsx  # Real-time tool visualization
 │   ├── ToolCallDisplay.css
@@ -66,13 +62,18 @@ src/
 └── main.jsx             # Entry point
 ```
 
+## Avatar Behavior
+
+- **Beyond Presence Available**: Shows realistic, lip-synced avatar video
+- **Loading State**: Shows animated avatar with "Loading AI Avatar..." text
+- **Fallback**: Animated avatar that pulses when speaking
+
 ## Deployment (Vercel)
 
 1. Push to GitHub
 2. Connect repo to Vercel
 3. Set environment variables:
-   - `VITE_TOKEN_SERVER_URL` = Backend URL
-   - `VITE_BEYOND_PRESENCE_API_KEY` = Beyond Presence key
+   - `VITE_TOKEN_SERVER_URL` = Your Render backend URL (e.g., `https://voice-agent-backend.onrender.com`)
 4. Deploy!
 
 ## License
