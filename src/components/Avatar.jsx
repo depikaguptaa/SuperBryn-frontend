@@ -1,88 +1,56 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import './Avatar.css';
 
 /**
- * Avatar component that displays the Beyond Presence avatar
- * or a fallback animated avatar when Beyond Presence is not available.
+ * Avatar Component
+ * Shows an animated avatar that reacts to the agent's speaking state.
+ * Uses a simple animated design as fallback.
  */
-function Avatar({ isActive }) {
-    const [useBeyondPresence, setUseBeyondPresence] = useState(false);
-    const [isSpeaking, setIsSpeaking] = useState(false);
-    const audioContextRef = useRef(null);
-    const analyserRef = useRef(null);
+export default function Avatar({ isSpeaking = false, agentName = 'AI Assistant' }) {
+    const [wavesActive, setWavesActive] = useState([false, false, false, false, false]);
 
-    // Beyond Presence API key from environment
-    const beyondPresenceApiKey = import.meta.env.VITE_BEYOND_PRESENCE_API_KEY;
-
+    // Animate waves when speaking
     useEffect(() => {
-        // Check if Beyond Presence is configured
-        if (beyondPresenceApiKey && beyondPresenceApiKey !== 'your_beyond_presence_key') {
-            setUseBeyondPresence(true);
-        }
-    }, [beyondPresenceApiKey]);
-
-    // Simulate speaking detection based on audio output
-    useEffect(() => {
-        if (!isActive) {
-            setIsSpeaking(false);
+        if (!isSpeaking) {
+            setWavesActive([false, false, false, false, false]);
             return;
         }
 
-        // Simple animation toggle for demo
-        // In production, this would analyze actual audio levels
         const interval = setInterval(() => {
-            setIsSpeaking(prev => Math.random() > 0.3);
-        }, 200);
+            setWavesActive([
+                Math.random() > 0.3,
+                Math.random() > 0.3,
+                Math.random() > 0.3,
+                Math.random() > 0.3,
+                Math.random() > 0.3,
+            ]);
+        }, 150);
 
         return () => clearInterval(interval);
-    }, [isActive]);
-
-    // Fallback animated avatar
-    const FallbackAvatar = () => (
-        <div className={`fallback-avatar ${isActive ? 'active' : ''} ${isSpeaking ? 'speaking' : ''}`}>
-            <div className="avatar-circle">
-                <div className="avatar-face">
-                    <div className="eyes">
-                        <div className="eye left"></div>
-                        <div className="eye right"></div>
-                    </div>
-                    <div className={`mouth ${isSpeaking ? 'speaking' : ''}`}></div>
-                </div>
-                <div className="avatar-glow"></div>
-            </div>
-            <div className="sound-waves">
-                {[...Array(5)].map((_, i) => (
-                    <div
-                        key={i}
-                        className={`wave ${isSpeaking ? 'active' : ''}`}
-                        style={{ animationDelay: `${i * 0.1}s` }}
-                    />
-                ))}
-            </div>
-        </div>
-    );
-
-    // Beyond Presence iframe avatar
-    const BeyondPresenceAvatar = () => (
-        <div className="beyond-presence-container">
-            <iframe
-                src={`https://widget.beyondpresence.ai/avatar?api_key=${beyondPresenceApiKey}`}
-                title="AI Avatar"
-                className="beyond-presence-iframe"
-                allow="microphone; camera"
-                frameBorder="0"
-            />
-        </div>
-    );
+    }, [isSpeaking]);
 
     return (
         <div className="avatar-container">
-            {useBeyondPresence ? <BeyondPresenceAvatar /> : <FallbackAvatar />}
-            {!useBeyondPresence && (
-                <div className="avatar-label">AI Assistant</div>
-            )}
+            <div className={`fallback-avatar ${isSpeaking ? 'speaking' : ''}`}>
+                {/* Ripple effect when speaking */}
+                <div className="avatar-glow" />
+                <div className="avatar-glow" style={{ animationDelay: '0.5s' }} />
+
+                {/* Main avatar circle with microphone icon */}
+                <div className="avatar-circle" />
+
+                {/* Sound wave visualization */}
+                <div className="sound-waves">
+                    {wavesActive.map((active, i) => (
+                        <div
+                            key={i}
+                            className={`wave ${active ? 'active' : ''}`}
+                        />
+                    ))}
+                </div>
+            </div>
+
+            <span className="avatar-label">{agentName}</span>
         </div>
     );
 }
-
-export default Avatar;
