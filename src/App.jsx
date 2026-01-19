@@ -96,8 +96,11 @@ function VoiceAgentRoom({ onCallEnd }) {
   }, [audioTracks]);
 
   // Listen for tool call events from the agent
-  const onDataReceived = useCallback((payload, participant, kind, topic) => {
-    console.log('Data received:', { topic, payload: payload ? 'has data' : 'empty', participant: participant?.identity });
+  const onDataReceived = useCallback((msg) => {
+    // msg is a ReceivedDataMessage: { payload, participant, topic }
+    console.log('Full data message:', msg);
+    const { payload, participant, topic } = msg || {};
+    console.log('Data received - topic:', topic, 'participant:', participant?.identity, 'has payload:', !!payload);
 
     if (topic === 'tool_calls') {
       try {
@@ -107,13 +110,20 @@ function VoiceAgentRoom({ onCallEnd }) {
         if (data.type === 'tool_call_start') {
           setToolCalls(prev => [...prev, { ...data, status: 'running' }]);
         } else if (data.type === 'tool_call_end') {
-          setToolCalls(prev =>
-            prev.map(tc =>
-              tc.function === data.function && tc.status === 'running'
-                ? { ...tc, status: 'completed', result: data.result }
-                : tc
-            )
-          );
+          setToolCalls(prev => {
+            // Check if there's a running entry to update
+            const hasRunning = prev.some(tc => tc.function === data.function && tc.status === 'running');
+            if (hasRunning) {
+              return prev.map(tc =>
+                tc.function === data.function && tc.status === 'running'
+                  ? { ...tc, status: 'completed', result: data.result }
+                  : tc
+              );
+            } else {
+              // No running entry - add as completed directly
+              return [...prev, { ...data, status: 'completed' }];
+            }
+          });
 
           // Check if conversation ended
           if (data.function === 'end_conversation') {

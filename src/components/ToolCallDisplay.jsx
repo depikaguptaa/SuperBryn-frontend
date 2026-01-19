@@ -26,9 +26,36 @@ function ToolCallDisplay({ toolCalls }) {
 
     // Format arguments for display
     const formatArguments = (args) => {
-        if (!args || Object.keys(args).length === 0) return null;
+        if (!args) return null;
 
-        return Object.entries(args).map(([key, value]) => (
+        // Parse if it's a JSON string
+        let parsedArgs = args;
+        if (typeof args === 'string') {
+            try {
+                parsedArgs = JSON.parse(args);
+            } catch (e) {
+                // If parsing fails, don't display raw JSON string
+                return null;
+            }
+        }
+
+        // Check if it's an object with keys
+        if (typeof parsedArgs !== 'object' || Object.keys(parsedArgs).length === 0) {
+            return null;
+        }
+
+        // Filter out placeholder and empty arguments
+        const filteredEntries = Object.entries(parsedArgs).filter(([key, value]) => {
+            // Skip placeholder parameter (used for API compatibility)
+            if (key === 'placeholder') return false;
+            // Skip empty values
+            if (value === '' || value === null || value === undefined) return false;
+            return true;
+        });
+
+        if (filteredEntries.length === 0) return null;
+
+        return filteredEntries.map(([key, value]) => (
             <span key={key} className="arg">
                 <span className="arg-key">{key}:</span>
                 <span className="arg-value">{String(value)}</span>
